@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>PMS 4.1 – Simulateur Inspection DDPP</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f5f7fa;color:#1f2937}
+header{background:#1E63B5;color:#fff;padding:20px;text-align:center}
+nav{display:flex;gap:10px;justify-content:center;background:#fff;border-bottom:1px solid #ddd;padding:10px}
+button{padding:10px 14px;border-radius:8px;border:1px solid #ccc;background:#fff;cursor:pointer;font-weight:600}
+button.primary{background:#1E63B5;color:#fff;border:none}
+main{max-width:1100px;margin:auto;padding:20px}
+.card{background:#fff;border-radius:12px;padding:18px;margin-bottom:16px;border:1px solid #e5e7eb}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.scene{border:1px solid #e5e7eb;border-radius:10px;padding:14px}
+.scene h3{margin-top:0}
+.score{font-size:26px;font-weight:800;color:#1E63B5}
+footer{padding:20px;text-align:center;color:#64748b}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>PMS 4.1 – Simulateur Inspection Sanitaire</h1>
+<p>Plateforme pédagogique HACCP / PMS – Simulation inspection DDPP</p>
+</header>
+
+<nav>
+<button onclick="show('home')">Accueil</button>
+<button onclick="show('sim')">Inspection</button>
+<button onclick="show('report')">Rapport</button>
+</nav>
+
+<main>
+
+<section id="home" class="card">
+<h2>Plateforme PMS</h2>
+<p>Simulation pédagogique d'inspection sanitaire basée sur le PMS et la réglementation européenne.</p>
+<ul>
+<li>Règlement CE 852/2004</li>
+<li>Règlement CE 178/2002</li>
+<li>Règlement UE 1169/2011</li>
+</ul>
+</section>
+
+<section id="sim" class="card" style="display:none">
+<h2>Simulation inspection</h2>
+
+<div class="grid">
+
+<div class="scene">
+<h3>Réception marchandises</h3>
+<label><input type="checkbox" data-bad> Cartons au sol</label><br>
+<label><input type="checkbox" data-bad> Pas de contrôle température</label><br>
+<label><input type="checkbox"> Camion identifié</label>
+</div>
+
+<div class="scene">
+<h3>Stockage réserve</h3>
+<label><input type="checkbox" data-bad> Produits chimiques avec denrées</label><br>
+<label><input type="checkbox"> Étagères présentes</label><br>
+<label><input type="checkbox" data-bad> Sac farine au sol</label>
+</div>
+
+<div class="scene">
+<h3>Chambre froide</h3>
+<label><input type="checkbox" data-bad> Viande crue au-dessus salade</label><br>
+<label><input type="checkbox" data-bad> Produit sans date</label><br>
+<label><input type="checkbox"> Desserts filmés</label>
+</div>
+
+</div>
+
+<br>
+
+<button class="primary" onclick="compute()">Calculer score</button>
+
+</section>
+
+<section id="report" class="card" style="display:none">
+<h2>Rapport inspection</h2>
+<p class="score" id="score">0%</p>
+<textarea id="rapport" style="width:100%;height:200px"></textarea>
+</section>
+
+</main>
+
+<footer>
+Plateforme pédagogique PMS – simulateur inspection
+</footer>
+
+<script>
+
+function show(id){
+document.querySelectorAll("main section").forEach(s=>s.style.display="none")
+document.getElementById(id).style.display="block"
+}
+
+function compute(){
+
+let good=0
+let total=0
+
+document.querySelectorAll("input").forEach(i=>{
+if(i.dataset.bad){total++
+if(i.checked)good++}
+})
+
+let score=Math.round((good/total)*100)
+
+document.getElementById("score").textContent=score+"%"
+
+document.getElementById("rapport").value=
+"Rapport inspection PMS\n\nScore : "+score+"%\n\nActions recommandées :\n- renforcer traçabilité\n- vérifier températures\n- améliorer stockage"
+
+show("report")
+}
+
+</script>
+
+</body>
+</html>
